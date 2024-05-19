@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+  font-family: "Raleway", sans-serif;
+  display: flex;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  background-color: #16242e;
+  justify-content: center;
+}
+
+#itemSelect {
+  width: 100%;
+  font-weight: 600;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #094d851a;
+  transition: border-color 0.3s ease;
+}
+
+.container {
+  max-width: 400px;
+  margin: 60px 60px;
+  padding: 40px;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  padding-bottom: 30px;
+  color: #333;
+}
+
+form {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #555;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+  width: calc(100% - 24px); /* Adjusted width with consistent left and right padding */
+  padding: 12px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #094d851a;
+  transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus {
+  border-color: #25829c;
+}
+
+button {
+  margin-top: 40px;
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background-color: #246591;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #153c56;
+}
+
+.toast {
+  background-color: #00ff8c;
+  color: #000000;
+  font-size: 16px;
+  padding: 12px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+svg{
+  border-radius: 10px;
+}
+
+video{
+  border-radius: 10px;
+}
+
+.qr-code-info {
+  margin-top: 10px;
+  font-style: italic;
+  color: #777;
+}
+
+.qr-code-info p {
+  margin: 5px 0;
+}
+
+.qr-code-info p.green {
+  color: green;
+}
