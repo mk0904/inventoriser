@@ -80,7 +80,7 @@ select:focus {
   border-color: #25829c;
 }
 
-.container button {
+#submit{
   margin-top: 40px;
   display: block;
   width: 100%;
@@ -93,7 +93,7 @@ select:focus {
   transition: background-color 0.3s ease;
 }
 
-button:hover {
+#submit {
   background-color: #153c56;
 }
 

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
-import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast from react-toastify
-import 'react-toastify/dist/ReactToastify.css'; // Import the React Toastify CSS
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import QrScannerModal from './QrScannerModal';
 
 const App = () => {
@@ -16,16 +16,9 @@ const App = () => {
 
   useEffect(() => {
     const fetchItems = async () => {
-      try {
-        const response = await fetch('https://api-staging.inveesync.in/test/get-items');
-        if (!response.ok) {
-          throw new Error('Failed to fetch items');
-        }
-        const data = await response.json();
-        setItems(data);
-      } catch (error) {
-        console.error('Fetch Items Error:', error.message);
-      }
+      const response = await fetch('https://api-staging.inveesync.in/test/get-items');
+      const data = await response.json();
+      setItems(data);
     };
 
     fetchItems();
@@ -53,6 +46,8 @@ const App = () => {
   const handleDestinationClick = () => {
     setShowQrModal(true);
     setToastMessage('');
+    setQrData('');
+    setQuantityInWords('');
   };
 
   const handleScanQrCode = (data) => {
@@ -195,7 +190,7 @@ const App = () => {
         pauseOnHover
       />
       
-      <button onClick={handleSubmit}>Submit</button>
+      <button id='submit' onClick={handleSubmit}>Submit</button>
     </div>
   );
 };
