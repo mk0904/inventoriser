@@ -36,6 +36,20 @@ h1 {
   color: #333;
 }
 
+#quantityInput{
+  margin-bottom: 0px;
+}
+
+.quantityInWords {
+  font-size: 12px;
+  font-weight: 600;
+  padding-bottom: 20px;
+}
+
+.unitsInput{
+  margin-top: 10px;
+}
+
 form {
   margin-bottom: 20px;
 }
@@ -66,7 +80,7 @@ select:focus {
   border-color: #25829c;
 }
 
-button {
+.container button {
   margin-top: 40px;
   display: block;
   width: 100%;
@@ -92,24 +106,41 @@ button:hover {
   margin-top: 10px;
 }
 
-svg{
+/* New styles for the modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Darken background */
+  z-index: 9998; /* Ensure overlay is behind modal content */
+}
+
+.modal-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  height: 18rem;
+  width: 18rem;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 2px;
   border-radius: 10px;
+  z-index: 9999;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-video{
+.modal-content video{
   border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
-.qr-code-info {
-  margin-top: 10px;
-  font-style: italic;
-  color: #777;
-}
-
-.qr-code-info p {
-  margin: 5px 0;
-}
-
-.qr-code-info p.green {
-  color: green;
+.close {
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 50px;
+  color: #000000;
+  z-index: 100;
 }

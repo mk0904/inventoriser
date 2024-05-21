@@ -1,6 +1,8 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
-import { Scanner } from '@yudiel/react-qr-scanner';
+import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast from react-toastify
+import 'react-toastify/dist/ReactToastify.css'; // Import the React Toastify CSS
+import QrScannerModal from './QrScannerModal';
 
 const App = () => {
   const [items, setItems] = useState([]);
@@ -9,7 +11,7 @@ const App = () => {
   const [quantity, setQuantity] = useState(0);
   const [quantityInWords, setQuantityInWords] = useState('');
   const [qrData, setQrData] = useState('');
-  const [showQrReader, setShowQrReader] = useState(false);
+  const [showQrModal, setShowQrModal] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
 
   useEffect(() => {
@@ -49,32 +51,31 @@ const App = () => {
   };
 
   const handleDestinationClick = () => {
-    setQrData('');
-    setShowQrReader(true); // Show QR reader when destination input is clicked
-    setToastMessage(''); // Clear previous toast messages
+    setShowQrModal(true);
+    setToastMessage('');
   };
 
   const handleScanQrCode = (data) => {
     if (data) {
       setQrData(data);
-      setShowQrReader(false); // Close QR reader after successful scan
+      setShowQrModal(false);
     }
   };
 
   const handleSubmit = async () => {
     if (!qrData) {
-      setToastMessage('Please scan the QR code for destination');
+      showToast('Please scan the QR code for destination');
       return;
     }
 
     const selectedItemData = items.find((item) => item.item_name === selectedItem);
     if (!selectedItemData) {
-      setToastMessage('Invalid item selected');
+      showToast('Invalid item selected');
       return;
     }
 
     if (!selectedItemData.allowed_locations.includes(qrData)) {
-      setToastMessage('Destination not allowed for selected item. Please try again.');
+      showToast('Destination not allowed for selected item. Please try again.');
       setQrData('');
       return;
     }
@@ -88,57 +89,56 @@ const App = () => {
     });
 
     if (response.ok) {
-      setToastMessage('Item submitted successfully!');
-      // Optionally, you can clear the form fields or reset the state here
+      showToast('Submitted successfully!', 'success');
+      setSelectedItem('');
+      setUnits('');
+      setQuantity(0);
     } else {
-      throw new Error('Error submitting item');
+      showToast('Error', 'error');
     }
     setQrData('');
   };
 
+  const showToast = (message, type = 'error') => {
+    toast[type](message, {
+      position: 'bottom-right',
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
   const convertToWords = (n) => {
-    const singleDigit = [
-      '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'
+    const ones = [
+      '', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
+      'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'
     ];
-    const doubleDigit = [
-      'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
+    const tens = [
+      '', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'
     ];
-    const belowHundred = [
-      'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'
-    ];
-    const higherDenominations = ['', 'Thousand', 'Lakh'];
-  
-    if (n === 0) return 'Zero';
-  
-    function toWords(num) {
-      let words = '';
-      if (num < 10) {
-        words = singleDigit[num];
-      } else if (num < 20) {
-        words = doubleDigit[num - 10];
-      } else if (num < 100) {
-        words = belowHundred[Math.floor(num / 10) - 2] + ' ' + singleDigit[num % 10];
-      } else {
-        const hundred = singleDigit[Math.floor(num / 100)] + ' Hundred';
-        const remainder = toWords(num % 100);
-        words = hundred + (remainder ? ' ' + remainder : '');
-      }
-      return words.trim();
+    const num = parseInt(n, 10);
+    if (num === 0) {
+      return 'Zero';
     }
-  
-    let result = '';
-    let index = 0;
-    while (n > 0) {
-      const chunk = n % 1000;
-      if (chunk !== 0) {
-        const words = toWords(chunk);
-        result = words + ' ' + higherDenominations[index] + ' ' + result;
-      }
-      n = Math.floor(n / 1000);
-      index++;
+    if (num < 20) {
+      return ones[num];
     }
-  
-    return result.trim();
+    if (num < 100) {
+      return tens[Math.floor(num / 10)] + ' ' + ones[num % 10];
+    }
+    if (num < 1000) {
+      return ones[Math.floor(num / 100)] + ' hundred ' + convertToWords(num % 100);
+    }
+    if (num < 1000000) {
+      return convertToWords(Math.floor(num / 1000)) + ' thousand ' + convertToWords(num % 1000);
+    }
+    if (num < 1000000000) {
+      return convertToWords(Math.floor(num / 1000000)) + ' million ' + convertToWords(num % 1000000);
+    }
+    return 'Number too large';
   };
 
   return (
@@ -156,8 +156,10 @@ const App = () => {
       <div>
         <label htmlFor="quantityInput">Quantity:</label>
         <input type="number" id="quantityInput" value={quantity} min="0" onChange={handleQuantityChange} />
+        {quantityInWords && <span className='quantityInWords'>{quantityInWords}</span>}
       </div>
-      <div>
+      
+      <div className='unitsInput'>
         <label htmlFor="unitsInput">Unit:</label>
         <input type="text" id="unitsInput" value={units} readOnly />
       </div>
@@ -172,15 +174,27 @@ const App = () => {
           placeholder="Click to scan QR code"
         />
       </div>
-      <p>Quantity in words: {quantityInWords}</p>
       
-      {showQrReader && (
-        <Scanner
-          onResult={handleScanQrCode}
-          onError={(error) => console.error('Scan Error:', error?.message)}
+      {showQrModal && (
+        <QrScannerModal
+          isOpen={showQrModal}
+          onClose={() => setShowQrModal(false)}
+          onScan={handleScanQrCode}
         />
       )}
-      {toastMessage && <div className="toast">{toastMessage}</div>}
+      
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      
       <button onClick={handleSubmit}>Submit</button>
     </div>
   );
