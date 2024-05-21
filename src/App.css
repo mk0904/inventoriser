@@ -124,8 +124,8 @@ select:focus {
   height: 18rem;
   width: 18rem;
   transform: translate(-50%, -50%);
-  background-color: #fff;
-  padding: 2px;
+  background-color: #16242e;
+  padding: 4px;
   border-radius: 10px;
   z-index: 9999;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -135,6 +135,12 @@ select:focus {
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+.modal-content svg{
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 .close {
   position: absolute;
   top: -10px;
